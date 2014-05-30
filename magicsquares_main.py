@@ -1,4 +1,4 @@
-#This function determines if two square overlap each other, and if they do, then the overlapping area is calculated.
+#This function determines if two squares overlap each other, and if they do, then the overlapping area is calculated.
 #The input is the lower left corner coordinate of each square and the length of the sides.
 
 
