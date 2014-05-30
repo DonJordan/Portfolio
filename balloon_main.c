@@ -71,25 +71,6 @@ void command(unsigned char c)
     pulse_e();
 }
 
-
-void lcd_putch( char ch )
-{
-    PORTC = ch;
-    RS = 1;
-    pulse_e();
-}
-
-
-void lcd_puts( char *s )
-{
-    while ( *s ) 
-    {
-        lcd_putch( *s );
-        s++;
-    }
-}
-
-
 void data(unsigned char c)
 {
     // Send Data to LCD to be displayed	
@@ -225,25 +206,13 @@ Read_Temp_I()
     GODONE = 1;
     while (GODONE);
     j = ADRES;
-    sprintf(buffer,"%d",j);
+    sprintf(temperature,"%d",j);
     command(0x80);
-    if (buffer[0] == '-')
-    {
-
-        data(buffer[0]);
-        data(buffer[1]);
-        data(buffer[2]);
-    }
-    else
-    {
-        data(buffer[0]);
-        data(buffer[1]);
-        data(buffer[2]);
-    }
 }
 
 char Read_Temp_E() {
     // Read Exterior Temperature
+    temperature[] = ""
     int j;
     j = 0;
     ADCON0 = 0b00001100;
@@ -255,23 +224,8 @@ char Read_Temp_E() {
     GODONE = 1;
     while (GODONE);
     j = ADRES;
-    sprintf(buffer,"%f",j*.4883-273);
+    sprintf(temperature,"%f",j*.4883-273);
     command(0x80);
-    if (buffer[0] == '-')
-    {
-
-        data(buffer[0]);
-        data(buffer[1]);
-        data(buffer[2]);
-    }
-    else
-    {
-        data(buffer[0]);
-        data(buffer[1]);
-        data(buffer[2]);
-    }
-    return c;
-
 }
 
 void SD_address(unsigned int c)
@@ -342,7 +296,7 @@ void SD_Put(unsigned int d)
     SD_write(0xFE);
     for (int i=0; i<6; i++)
     {
-        SD_write(data[i]);
+        SD_write(temperature[i]);
     }
     for (int k=0; k<506; k++)
     {
@@ -412,9 +366,11 @@ void main()
         {
             LATCbits.LATC1 = 1;
         }
-        Read_Temp_I()
+        Read_Temp_I();
         SD_Put(d);
-        RB3 = 0;
+        d++;
+        Read_Temp_E();
+        SD_Put(d);
         d++;
     }
 }
