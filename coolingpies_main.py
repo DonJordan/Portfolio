@@ -1,3 +1,5 @@
+#Problem statement: http://www.codechef.com/problems/COOLING
+
 t = int(input())
      
 for g in range(0, t):
