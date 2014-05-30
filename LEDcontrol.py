@@ -1,4 +1,4 @@
-#This functi
+#Controls am 8x8 LED matrix through the serial line
 
 import serial, sys, math
 import pygame
